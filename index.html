@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Recibo Amador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .recibo {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #000;
+            width: 100%;
+            background-color: #f9f9f9;
+        }
+        .recibo h2 {
+            text-align: center;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gerador de Recibo Amador</h1>
+        
+        <form id="reciboForm">
+            <label for="nomeCliente">Nome do Cliente:</label><br>
+            <input type="text" id="nomeCliente" name="nomeCliente" required><br><br>
+
+            <label for="servicoPrestado">Serviço Prestado:</label><br>
+            <input type="text" id="servicoPrestado" name="servicoPrestado" required><br><br>
+
+            <label for="valor">Valor:</label><br>
+            <input type="number" id="valor" name="valor" required><br><br>
+
+            <label for="dataServico">Data:</label><br>
+            <input type="date" id="dataServico" name="dataServico" required><br><br>
+
+            <button type="button" onclick="gerarRecibo()">Gerar Recibo</button>
+            <button type="button" onclick="gerarPDF()">Baixar PDF</button>
+        </form>
+
+        <div class="recibo" id="recibo" style="display:none;">
+            <img src="logo.png" alt="Logo da Empresa" width="150"><br>
+            <h2>Recibo</h2>
+            <p>Recebi(emos) de <strong><span id="reciboNomeCliente"></span></strong> a quantia de <strong>R$ <span id="reciboValor"></span></strong> referente ao serviço de <strong><span id="reciboServicoPrestado"></span></strong>.</p>
+            <p>Data: <span id="reciboData"></span></p>
+            <p>Assinatura: _______________________________</p>
+            <p><strong>Razão Social:</strong> Sua Empresa Ltda.</p>
+            <p><strong>CNPJ:</strong> 00.000.000/0001-00</p>
+            <p><strong>Endereço:</strong> Rua Exemplo, 123, Bairro, Cidade, Estado</p>
+        </div>
+    </div>
+
+    <script>
+        function gerarRecibo() {
+            // Coleta dos dados
+            const nomeCliente = document.getElementById('nomeCliente').value;
+            const servicoPrestado = document.getElementById('servicoPrestado').value;
+            const valor = document.getElementById('valor').value;
+            const dataServico = document.getElementById('dataServico').value;
+
+            // Exibição dos dados no recibo
+            document.getElementById('reciboNomeCliente').textContent = nomeCliente;
+            document.getElementById('reciboServicoPrestado').textContent = servicoPrestado;
+            document.getElementById('reciboValor').textContent = parseFloat(valor).toFixed(2);
+            document.getElementById('reciboData').textContent = new Date(dataServico).toLocaleDateString('pt-BR');
+
+            // Exibe o recibo
+            document.getElementById('recibo').style.display = 'block';
+        }
+
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Coleta dos dados para o PDF
+            const nomeCliente = document.getElementById('reciboNomeCliente').textContent;
+            const servicoPrestado = document.getElementById('reciboServicoPrestado').textContent;
+            const valor = document.getElementById('reciboValor').textContent;
+            const dataServico = document.getElementById('reciboData').textContent;
+
+            // Título do recibo
+            doc.setFontSize(20);
+            doc.text("Recibo", 105, 20, { align: "center" });
+
+            // Dados do recibo
+            doc.setFontSize(12);
+            doc.text(`Recebi(emos) de ${nomeCliente} a quantia de R$ ${valor}`, 20, 40);
+            doc.text(`referente ao(s) serviço(s) de ${servicoPrestado}.`, 20, 50);
+            doc.text(`Data: ${dataServico}`, 20, 60);
+            doc.text("Assinatura: _______________________________", 20, 80);
+            doc.text("Razão Social: Sua Empresa Ltda.", 20, 100);
+            doc.text("CNPJ: 00.000.000/0001-00", 20, 110);
+            doc.text("Endereço: Rua Exemplo, 123, Bairro, Cidade, Estado", 20, 120);
+
+            // Gera o PDF e abre para download
+            doc.save(`recibo${dataServico}.pdf`);
+        }
+    </script>
+</body>
+</html>
