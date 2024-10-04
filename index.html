@@ -3,110 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Título Exemplo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-        .recibo {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #000;
-            width: 100%;
-            background-color: #f9f9f9;
-        }
-        .recibo h2 {
-            text-align: center;
-        }
-    </style>
+    <title>Gerador de Recibo - Serviços Gerais</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-
     <div class="container">
-        <h1>Título Exemplo</h1>
+        <h1>Gerador de Recibo - JE Serviços Elétricos</h1>
         
         <form id="reciboForm">
-            <label for="nomeCliente">Nome do Cliente:</label><br>
-            <input type="text" id="nomeCliente" name="nomeCliente" required><br><br>
+            <label for="nomeCliente">Nome do Cliente:</label>
+            <input type="text" id="nomeCliente" name="nomeCliente" required>
 
-            <label for="servicoPrestado">Serviço Prestado:</label><br>
-            <input type="text" id="servicoPrestado" name="servicoPrestado" required><br><br>
+            <label for="cpfCliente">CPF do Cliente (Opcional):</label>
+            <input type="text" id="cpfCliente" name="cpfCliente" placeholder="Opcional">
 
-            <label for="valor">Valor:</label><br>
-            <input type="number" id="valor" name="valor" required><br><br>
+            <label for="cnpjCliente">CNPJ do Cliente (Opcional):</label>
+            <input type="text" id="cnpjCliente" name="cnpjCliente" placeholder="Opcional">
 
-            <label for="dataServico">Data:</label><br>
-            <input type="date" id="dataServico" name="dataServico" required><br><br>
+            <label for="servicoPrestado">Serviço Prestado:</label>
+            <input type="text" id="servicoPrestado" name="servicoPrestado" required>
 
-            <button type="button" onclick="gerarRecibo()">Gerar Recibo</button>
-            <button type="button" onclick="gerarPDF()">Baixar PDF</button>
+            <label for="valor">Valor:</label>
+            <input type="number" id="valor" name="valor" required>
+
+            <label for="dataServico">Data:</label>
+            <input type="date" id="dataServico" name="dataServico" required>
+
+            <div class="buttons">
+                <button type="button" onclick="gerarRecibo()">Gerar Recibo</button>
+                <button type="button" onclick="gerarPDF()">Baixar PDF</button>
+            </div>
         </form>
 
         <div class="recibo" id="recibo" style="display:none;">
-            <img src="logo.png" alt="Logo da Empresa" width="150"><br>
-            <h2>Recibo</h2>
-            <p>Recebi(emos) de <strong><span id="reciboNomeCliente"></span></strong> a quantia de <strong>R$ <span id="reciboValor"></span></strong> referente ao serviço de <strong><span id="reciboServicoPrestado"></span></strong>.</p>
+            <img src="logo.png" alt="Logo da Empresa" width="150" >            
+            <h2>RECIBO DE PAGAMENTO</h2>
+            <p>Emitente: JE SERVIÇOS ELÉTRICOS LTDA</p>
+            <p>CNPJ: 00.000.000/0001-00</p>
+            <p>Responsável: Edson Souza</p>
+            <p>Whatsapp: (48) 9 9918 1760</p>
+            <p>Endereço: Rua das Margaridas, 27, São Miguel, Biguaçu, SC</p>
             <p>Data: <span id="reciboData"></span></p>
+
+            <hr class="recibo-line"> <!-- Linha antes da assinatura -->
+
+            <p>Recebido de: <span id="reciboNomeCliente"></span> <span id="reciboCPF" style="display:none;">(CPF: <span id="reciboCpfCliente"></span>)</span> <span id="reciboCNPJ" style="display:none;">(CNPJ: <span id="reciboCnpjCliente"></span>)</span></p>
+            <p>Descrição do Serviço: <span id="reciboServicoPrestado"></span></p>
+            <p>Valor Recebido: R$ <span id="reciboValor"></span></p>
             <p>Assinatura: _______________________________</p>
-            <p><strong>Razão Social:</strong> Sua Empresa Ltda.</p>
-            <p><strong>CNPJ:</strong> 00.000.000/0001-00</p>
-            <p><strong>Endereço:</strong> Rua Exemplo, 123, Bairro, Cidade, Estado</p>
         </div>
     </div>
 
     <script>
-        function gerarRecibo() {
-            // Coleta dos dados
-            const nomeCliente = document.getElementById('nomeCliente').value;
-            const servicoPrestado = document.getElementById('servicoPrestado').value;
-            const valor = document.getElementById('valor').value;
-            const dataServico = document.getElementById('dataServico').value;
-
-            // Exibição dos dados no recibo
-            document.getElementById('reciboNomeCliente').textContent = nomeCliente;
-            document.getElementById('reciboServicoPrestado').textContent = servicoPrestado;
-            document.getElementById('reciboValor').textContent = parseFloat(valor).toFixed(2);
-            document.getElementById('reciboData').textContent = new Date(dataServico).toLocaleDateString('pt-BR');
-
-            // Exibe o recibo
-            document.getElementById('recibo').style.display = 'block';
+     function gerarRecibo() {
+        const nomeCliente = document.getElementById('nomeCliente').value;
+        const cpfCliente = document.getElementById('cpfCliente').value;
+        const cnpjCliente = document.getElementById('cnpjCliente').value;
+        const servicoPrestado = document.getElementById('servicoPrestado').value;
+        const valor = document.getElementById('valor').value;
+        const dataServico = document.getElementById('dataServico').value;
+    
+        // Atribui os valores aos elementos do recibo
+        document.getElementById('reciboNomeCliente').textContent = nomeCliente;
+        document.getElementById('reciboServicoPrestado').textContent = servicoPrestado;
+        document.getElementById('reciboValor').textContent = parseFloat(valor).toFixed(2);
+        
+        // Usar a data diretamente do input, formatando para o padrão pt-BR
+        document.getElementById('reciboData').textContent = new Date(dataServico + 'T00:00:00').toLocaleDateString('pt-BR');
+    
+        // Exibe o CPF se houver, ou oculta se não for preenchido
+        if (cpfCliente) {
+            document.getElementById('reciboCpfCliente').textContent = cpfCliente;
+            document.getElementById('reciboCPF').style.display = 'inline';
+        } else {
+            document.getElementById('reciboCPF').style.display = 'none';
         }
-
-        function gerarPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Coleta dos dados para o PDF
-            const nomeCliente = document.getElementById('reciboNomeCliente').textContent;
-            const servicoPrestado = document.getElementById('reciboServicoPrestado').textContent;
-            const valor = document.getElementById('reciboValor').textContent;
-            const dataServico = document.getElementById('reciboData').textContent;
-
-            // Título do recibo
+    
+        // Exibe o CNPJ se houver, ou oculta se não for preenchido
+        if (cnpjCliente) {
+            document.getElementById('reciboCnpjCliente').textContent = cnpjCliente;
+            document.getElementById('reciboCNPJ').style.display = 'inline';
+        } else {
+            document.getElementById('reciboCNPJ').style.display = 'none';
+        }
+    
+        // Exibe o recibo
+        document.getElementById('recibo').style.display = 'block';
+    }
+    
+            function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+            
+        const nomeCliente = document.getElementById('reciboNomeCliente').textContent;
+        const cpfCliente = document.getElementById('reciboCpfCliente').textContent;
+        const cnpjCliente = document.getElementById('reciboCnpjCliente').textContent;
+        const servicoPrestado = document.getElementById('reciboServicoPrestado').textContent;
+        const valor = document.getElementById('reciboValor').textContent;
+        const dataRecebimento = document.getElementById('reciboData').textContent; // A data agora é dinâmica
+            
+        // Informações do emitente (estáticas)
+        const emitente = "JE SERVIÇOS ELÉTRICOS LTDA";
+        const cnpjEmitente = "00.000.000/0001-00";
+        const responsavel = "Edson Souza";
+        const whatsapp = "(48) 9 9918 1760";
+        const endereco = "Rua das Margaridas, 27, São Miguel, Biguaçu, SC";
+            
+        // Carregar a imagem logo.png como base64
+        const logo = new Image();
+        logo.src = 'logo.png'; // Caminho da imagem
+        logo.onload = function() {
+            doc.addImage(logo, 'PNG', 80, 10, 50, 30); // Adiciona a imagem ao PDF
+        
             doc.setFontSize(20);
-            doc.text("Recibo", 105, 20, { align: "center" });
-
-            // Dados do recibo
+            doc.text("RECIBO DE PAGAMENTO", 105, 45, { align: "center" });
+        
             doc.setFontSize(12);
-            doc.text(`Recebi(emos) de ${nomeCliente} a quantia de R$ ${valor}`, 20, 40);
-            doc.text(`referente ao(s) serviço(s) de ${servicoPrestado}.`, 20, 50);
-            doc.text(`Data: ${dataServico}`, 20, 60);
-            doc.text("Assinatura: _______________________________", 20, 80);
-            doc.text("Razão Social: Sua Empresa Ltda.", 20, 100);
-            doc.text("CNPJ: 00.000.000/0001-00", 20, 110);
-            doc.text("Endereço: Rua Exemplo, 123, Bairro, Cidade, Estado", 20, 120);
-
-            // Gera o PDF e abre para download
-            doc.save(`recibo${dataServico}.pdf`);
+            doc.text(`Emitente: ${emitente}`, 20, 60);
+            doc.text(`CNPJ: ${cnpjEmitente}`, 20, 65);
+            doc.text(`Responsável: ${responsavel}`, 20, 70);
+            doc.text(`Whatsapp: ${whatsapp}`, 20, 75);
+            doc.text(`Endereço: ${endereco}`, 20, 80);
+            doc.text(`Data: ${dataRecebimento}`, 20, 85); // Data dinâmica aqui
+        
+            doc.setLineWidth(0.5);
+            doc.line(20, 95, 190, 95);
+        
+            doc.text(`Recebido de: ${nomeCliente} ${cpfCliente ? `(CPF: ${cpfCliente})` : ''} ${cnpjCliente ? `(CNPJ: ${cnpjCliente})` : ''}`, 20, 110);
+            doc.text(`Descrição do Serviço: ${servicoPrestado}`, 20, 115);
+            doc.text(`Valor Recebido: R$ ${valor}`, 20, 120);
+            doc.text("Assinatura: _______________________________     Data:", 20, 130);
+        
+            doc.save(`recibo_${nomeCliente}_${dataRecebimento}.pdf`);
         }
+    }
     </script>
 </body>
 </html>
