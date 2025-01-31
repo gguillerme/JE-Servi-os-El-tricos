@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -39,11 +40,11 @@
         <div class="recibo" id="recibo" style="display:none;">
             <img src="logo.png" alt="Logo da Empresa" width="150" >            
             <h2>RECIBO DE PAGAMENTO</h2>
-            <p>Emitente: JE SERVIÇOS ELÉTRICOS LTDA</p>
-            <p>CNPJ: 00.000.000/0001-00</p>
-            <p>Responsável: Edson Souza</p>
-            <p>Whatsapp: (48) 9 9918 1760</p>
-            <p>Endereço: Rua das Margaridas, 27, São Miguel, Biguaçu, SC</p>
+            <p>Emitente: POUSADA PARADISE</p>
+
+            <p>Responsável: Maurino Sabino</p>
+            <p>Whatsapp: (53) 98102-4424</p>
+            <p>Endereço: R. Duque de Caxias, 530 - Centro, Rio Grande - RS, 96200-020</p>
             <p>Data: <span id="reciboData"></span></p>
 
             <hr class="recibo-line"> <!-- Linha antes da assinatura -->
@@ -51,7 +52,6 @@
             <p>Recebido de: <span id="reciboNomeCliente"></span> <span id="reciboCPF" style="display:none;">(CPF: <span id="reciboCpfCliente"></span>)</span> <span id="reciboCNPJ" style="display:none;">(CNPJ: <span id="reciboCnpjCliente"></span>)</span></p>
             <p>Descrição do Serviço: <span id="reciboServicoPrestado"></span></p>
             <p>Valor Recebido: R$ <span id="reciboValor"></span></p>
-            <p>Assinatura: _______________________________</p>
         </div>
     </div>
 
@@ -104,11 +104,11 @@
         const dataRecebimento = document.getElementById('reciboData').textContent; // A data agora é dinâmica
             
         // Informações do emitente (estáticas)
-        const emitente = "JE SERVIÇOS ELÉTRICOS LTDA";
-        const cnpjEmitente = "00.000.000/0001-00";
-        const responsavel = "Edson Souza";
-        const whatsapp = "(48) 9 9918 1760";
-        const endereco = "Rua das Margaridas, 27, São Miguel, Biguaçu, SC";
+        const emitente = "POUSADA PARADISE";
+
+        const responsavel = "Maurino Sabino";
+        const whatsapp = "(53) 98102-4424";
+        const endereco = "R. Duque de Caxias, 530 - Centro, Rio Grande - RS, 96200-020";
             
         // Carregar a imagem logo.png como base64
         const logo = new Image();
@@ -117,11 +117,11 @@
             doc.addImage(logo, 'PNG', 80, 10, 50, 30); // Adiciona a imagem ao PDF
         
             doc.setFontSize(20);
-            doc.text("RECIBO DE PAGAMENTO", 105, 45, { align: "center" });
+            doc.text("RECIBO", 105, 45, { align: "center" });
         
             doc.setFontSize(12);
             doc.text(`Emitente: ${emitente}`, 20, 60);
-            doc.text(`CNPJ: ${cnpjEmitente}`, 20, 65);
+    
             doc.text(`Responsável: ${responsavel}`, 20, 70);
             doc.text(`Whatsapp: ${whatsapp}`, 20, 75);
             doc.text(`Endereço: ${endereco}`, 20, 80);
@@ -133,7 +133,7 @@
             doc.text(`Recebido de: ${nomeCliente} ${cpfCliente ? `(CPF: ${cpfCliente})` : ''} ${cnpjCliente ? `(CNPJ: ${cnpjCliente})` : ''}`, 20, 110);
             doc.text(`Descrição do Serviço: ${servicoPrestado}`, 20, 115);
             doc.text(`Valor Recebido: R$ ${valor}`, 20, 120);
-            doc.text("Assinatura: _______________________________     Data:", 20, 130);
+
         
             doc.save(`recibo_${nomeCliente}_${dataRecebimento}.pdf`);
         }
