@@ -1,39 +1,43 @@
+/* Importando uma fonte do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f9;
+    color: #4a4a4a;
     padding: 20px;
-    background-color: #eaf0f6;
-    color: #333;
 }
 
 .container {
-    max-width: 650px;
+    max-width: 700px;
     margin: auto;
-    padding: 25px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
     text-align: center;
-    color: #1f4e79;
-    font-size: 28px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+    color: #333;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
 }
 
 label {
     display: block;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 8px;
-    color: #2a3f54;
+    color: #555;
+    font-size: 14px;
 }
 
 input[type="text"],
@@ -41,84 +45,187 @@ input[type="number"],
 input[type="date"] {
     width: 100%;
     padding: 12px;
-    margin-bottom: 18px;
-    border: 2px solid #a6b1c2;
-    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
     font-size: 16px;
-    background-color: #f1f4f9;
-    transition: border 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="date"]:focus {
-    border-color: #3498db;
+    border-color: #E63946; /* Cor da logo */
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
     outline: none;
 }
 
 .buttons {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 10px;
 }
 
 button {
-    flex: 1;
-    margin: 0 10px;
-    padding: 12px 20px;
-    background-color: #1abc9c;
+    padding: 14px 20px;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #16a085;
-    transform: scale(1.05);
+    transform: translateY(-2px);
 }
+
+/* Botão Primário (Visualizar) */
+button:nth-of-type(1) {
+    background-color: #1D3557; /* Um azul escuro complementar */
+}
+button:nth-of-type(1):hover {
+    background-color: #457B9D;
+}
+
+/* Botão Secundário (PDF) */
+button:nth-of-type(2) {
+    background-color: #E63946; /* Cor da logo */
+}
+
+button:nth-of-type(2):hover {
+    background-color: #d62839;
+}
+
 
 .recibo {
     margin-top: 30px;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.recibo-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.recibo-header img {
+    max-width: 120px;
+    margin-bottom: 15px;
+}
+
+.recibo-header h2 {
+    font-size: 22px;
+    color: #1D3557;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .recibo p {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #34495e;
-}
-
-.recibo h2 {
-    font-size: 24px;
-    text-align: center;
-    color: #1f4e79;
-}
-
-strong {
-    color: #1f4e79;
-    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
 }
 
 .recibo-line {
     border: none;
-    border-top: 2px solid #2c3e50;
+    border-top: 1px solid #dcdcdc;
     margin: 20px 0;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"] {
-    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.1);
-}
-button {
-    transition: all 0.2s ease-in-out;
+/* --- ESTILOS ADICIONAIS --- */
+
+/* Notificações */
+#notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.recibo h2 {
-    margin-bottom: 10px;
+.notification {
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.5s forwards;
+}
+
+.notification.error { background-color: #E63946; }
+.notification.success { background-color: #2a9d8f; }
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Ícone de Configurações */
+.settings-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #1D3557;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 998;
+}
+
+.settings-icon:hover {
+    transform: rotate(45deg);
+}
+
+/* Modal de Configurações */
+.modal {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.modal-button {
+    background-color: #1D3557;
+    width: 100%;
+    margin-top: 10px;
 }
