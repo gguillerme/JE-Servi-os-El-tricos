@@ -1,143 +1,76 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Recibo - Pousada Paradise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <div id="notification-container"></div>
+
+    <div class="settings-icon" id="settings-icon" title="Editar dados da Pousada">
+        <i class="fas fa-cog"></i>
+    </div>
+
     <div class="container">
         <h1>Gerador de Recibo - Pousada Paradise</h1>
         
         <form id="reciboForm">
             <label for="nomeCliente">Nome do Cliente:</label>
-            <input type="text" id="nomeCliente" name="nomeCliente" required>
+            <input type="text" id="nomeCliente" required>
 
-            <label for="cpfCliente">CPF do Cliente (Opcional):</label>
-            <input type="text" id="cpfCliente" name="cpfCliente" placeholder="Opcional">
+            <label for="cpfCliente">CPF do Cliente:</label>
+            <input type="text" id="cpfCliente" placeholder="000.000.000-00">
 
-            <label for="cnpjCliente">CNPJ do Cliente (Opcional):</label>
-            <input type="text" id="cnpjCliente" name="cnpjCliente" placeholder="Opcional">
+            <label for="cnpjCliente">CNPJ do Cliente:</label>
+            <input type="text" id="cnpjCliente" placeholder="00.000.000/0000-00">
 
             <label for="servicoPrestado">Serviço Prestado:</label>
-            <input type="text" id="servicoPrestado" name="servicoPrestado" required>
+            <input type="text" id="servicoPrestado" required>
 
-            <label for="valor">Valor:</label>
-            <input type="number" id="valor" name="valor" required>
+            <label for="valor">Valor (R$):</label>
+            <input type="text" id="valor" required placeholder="0,00">
 
             <label for="dataServico">Data:</label>
-            <input type="date" id="dataServico" name="dataServico" required>
+            <input type="date" id="dataServico" required>
 
             <div class="buttons">
-                <button type="button" onclick="gerarRecibo()">Gerar Recibo</button>
-                <button type="button" onclick="gerarPDF()">Baixar PDF</button>
+                <button type="button" id="btnVisualizar">Visualizar Recibo</button>
+                <button type="button" id="btnGerarPDF">Baixar PDF</button>
             </div>
         </form>
+        
+        <div id="reciboPreview" style="display:none;">
+            </div>
+    </div>
 
-        <div class="recibo" id="recibo" style="display:none;">
-            <img src="logo.png" alt="Logo da Empresa" width="150" >            
-            <h2>RECIBO DE PAGAMENTO</h2>
-            <p>Emitente: POUSADA PARADISE</p>
+    <div id="settings-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Configurações da Pousada</h2>
+            <label for="pousadaNome">Nome do Emitente:</label>
+            <input type="text" id="pousadaNome">
 
-            <p>Responsável: Maurino Sabino</p>
-            <p>Whatsapp: (53) 98102-4424</p>
-            <p>Endereço: R. Duque de Caxias, 530 - Centro, Rio Grande - RS, 96200-020</p>
-            <p>Data: <span id="reciboData"></span></p>
+            <label for="pousadaCpf">CPF do Responsável:</label>
+            <input type="text" id="pousadaCpf">
 
-            <hr class="recibo-line"> <!-- Linha antes da assinatura -->
+            <label for="pousadaResponsavel">Nome do Responsável:</label>
+            <input type="text" id="pousadaResponsavel">
 
-            <p>Recebido de: <span id="reciboNomeCliente"></span> <span id="reciboCPF" style="display:none;">(CPF: <span id="reciboCpfCliente"></span>)</span> <span id="reciboCNPJ" style="display:none;">(CNPJ: <span id="reciboCnpjCliente"></span>)</span></p>
-            <p>Descrição do Serviço: <span id="reciboServicoPrestado"></span></p>
-            <p>Valor Recebido: R$ <span id="reciboValor"></span></p>
+            <label for="pousadaWhatsapp">Whatsapp:</label>
+            <input type="text" id="pousadaWhatsapp">
+
+            <label for="pousadaEndereco">Endereço:</label>
+            <input type="text" id="pousadaEndereco">
+            
+            <button id="btnSalvarConfig" class="modal-button">Salvar</button>
         </div>
     </div>
 
-    <script>
-     function gerarRecibo() {
-        const nomeCliente = document.getElementById('nomeCliente').value;
-        const cpfCliente = document.getElementById('cpfCliente').value;
-        const cnpjCliente = document.getElementById('cnpjCliente').value;
-        const servicoPrestado = document.getElementById('servicoPrestado').value;
-        const valor = document.getElementById('valor').value;
-        const dataServico = document.getElementById('dataServico').value;
-    
-        // Atribui os valores aos elementos do recibo
-        document.getElementById('reciboNomeCliente').textContent = nomeCliente;
-        document.getElementById('reciboServicoPrestado').textContent = servicoPrestado;
-        document.getElementById('reciboValor').textContent = parseFloat(valor).toFixed(2);
-        
-        // Usar a data diretamente do input, formatando para o padrão pt-BR
-        document.getElementById('reciboData').textContent = new Date(dataServico + 'T00:00:00').toLocaleDateString('pt-BR');
-    
-        // Exibe o CPF se houver, ou oculta se não for preenchido
-        if (cpfCliente) {
-            document.getElementById('reciboCpfCliente').textContent = cpfCliente;
-            document.getElementById('reciboCPF').style.display = 'inline';
-        } else {
-            document.getElementById('reciboCPF').style.display = 'none';
-        }
-    
-        // Exibe o CNPJ se houver, ou oculta se não for preenchido
-        if (cnpjCliente) {
-            document.getElementById('reciboCnpjCliente').textContent = cnpjCliente;
-            document.getElementById('reciboCNPJ').style.display = 'inline';
-        } else {
-            document.getElementById('reciboCNPJ').style.display = 'none';
-        }
-    
-        // Exibe o recibo
-        document.getElementById('recibo').style.display = 'block';
-    }
-    
-            function gerarPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-            
-        const nomeCliente = document.getElementById('reciboNomeCliente').textContent;
-        const cpfCliente = document.getElementById('reciboCpfCliente').textContent;
-        const cnpjCliente = document.getElementById('reciboCnpjCliente').textContent;
-        const servicoPrestado = document.getElementById('reciboServicoPrestado').textContent;
-        const valor = document.getElementById('reciboValor').textContent;
-        const dataRecebimento = document.getElementById('reciboData').textContent; // A data agora é dinâmica
-            
-        // Informações do emitente (estáticas)
-        const emitente = "POUSADA PARADISE";
-
-        const responsavel = "Maurino Sabino";
-        const whatsapp = "(53) 98102-4424";
-        const endereco = "R. Duque de Caxias, 530 - Centro, Rio Grande - RS, 96200-020";
-            
-        // Carregar a imagem logo.png como base64
-        const logo = new Image();
-        logo.src = 'logo.png'; // Caminho da imagem
-        logo.onload = function() {
-            doc.addImage(logo, 'PNG', 80, 10, 50, 30); // Adiciona a imagem ao PDF
-        
-            doc.setFontSize(20);
-            doc.text("RECIBO", 105, 45, { align: "center" });
-        
-            doc.setFontSize(12);
-            doc.text(`Emitente: ${emitente}`, 20, 60);
-    
-            doc.text(`Responsável: ${responsavel}`, 20, 70);
-            doc.text(`Whatsapp: ${whatsapp}`, 20, 75);
-            doc.text(`Endereço: ${endereco}`, 20, 80);
-            doc.text(`Data: ${dataRecebimento}`, 20, 85); // Data dinâmica aqui
-        
-            doc.setLineWidth(0.5);
-            doc.line(20, 95, 190, 95);
-        
-            doc.text(`Recebido de: ${nomeCliente} ${cpfCliente ? `(CPF: ${cpfCliente})` : ''} ${cnpjCliente ? `(CNPJ: ${cnpjCliente})` : ''}`, 20, 110);
-            doc.text(`Descrição do Serviço: ${servicoPrestado}`, 20, 115);
-            doc.text(`Valor Recebido: R$ ${valor}`, 20, 120);
-
-        
-            doc.save(`recibo_${nomeCliente}_${dataRecebimento}.pdf`);
-        }
-    }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script src="script.js"></script>
 </body>
 </html>
