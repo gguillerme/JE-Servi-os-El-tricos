@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dados padrão da pousada
     const defaultPousadaInfo = {
         nome: "POUSADA PARADISE",
-        cpf: "851.155.500.59",
+        cpf: "639.412.440-00",
         responsavel: "Maurino Sabino",
         whatsapp: "(53) 98102-4424",
         endereco: "R. Duque de Caxias, 530 - Centro, Rio Grande - RS, 96200-020",
